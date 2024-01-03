@@ -4,6 +4,7 @@
 # run code in terminal with:   python3 main.py
 
 import pygame
+from image_helper import loadify
 from sys import exit
 
 pygame.init()  # necessary
@@ -34,8 +35,8 @@ test_font = pygame.font.Font(font_type, font_size)
 # test_surface.fill("Red")
 
 # REGULAR SURFACES WITH IMAGE
-sky_surface = pygame.image.load("./UltimatePygameIntro-main/graphics/Sky.png")
-ground_surface = pygame.image.load("./UltimatePygameIntro-main/graphics/ground.png")
+sky_surface = loadify("./UltimatePygameIntro-main/graphics/Sky.png")
+ground_surface = loadify("./UltimatePygameIntro-main/graphics/ground.png")
 
 # CREATING TEXT
 # 1. Create a font  2. write text on a surface   3. blit that surface
@@ -43,6 +44,11 @@ text = "Logan's Game"
 anti_alias = False  # looks pixelated or smooth
 text_color = "black"
 text_surface = test_font.render(text, anti_alias, text_color)
+
+
+# snail animation
+snail_suface = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
+snail_x_position = 600
 
 # while loop needed to make pygame display window stay open forever
 while True:
@@ -53,16 +59,20 @@ while True:
             # Use exit so code outside the for loop won't run once you call quit()
             exit()
 
-        # Attach test_surface to the DISPLAY surface
-        # BLock Image Transfer aka "blit" command
-        # (0, 0) is the TOP LEFT corner of the window
-        screen.blit(sky_surface, (0, 0))
-        screen.blit(ground_surface, (0, 300))
-        screen.blit(text_surface, (300, 50))
+    # Attach test_surface to the DISPLAY surface
+    # BLock Image Transfer aka "blit" command
+    # (0, 0) is the TOP LEFT corner of the window
+    screen.blit(sky_surface, (0, 0))
+    screen.blit(ground_surface, (0, 300))
+    screen.blit(text_surface, (300, 50))
+    snail_x_position -= 4  # minus to make it move left
+    if snail_x_position < 0:
+        snail_x_position = 800
+    screen.blit(snail_suface, (snail_x_position, 250))
 
-        # draw all our elements
-        # update everything.
-        pygame.display.update()
+    # draw all our elements
+    # update everything.
+    pygame.display.update()
 
-        # This while true loop shouldn't run faster than 60 frames per second (a ceiling)
-        clock.tick(60)
+    # This while true loop shouldn't run faster than 60 frames per second (a ceiling)
+    clock.tick(60)
