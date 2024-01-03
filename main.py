@@ -47,8 +47,23 @@ text_surface = test_font.render(text, anti_alias, text_color)
 
 
 # snail animation
-snail_suface = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
-snail_x_position = 600
+snail_surface = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
+# snail_x_position = 600
+snail_rect = snail_surface.get_rect(midbottom=(600, 300))
+
+# player and Rectangle
+player_surf = loadify("./UltimatePygameIntro-main/graphics/Player/player_walk_1.png")
+player_x = 80
+player_y = 300
+player_rect = player_surf.get_rect(
+    midbottom=(player_x, player_y)
+)  # draw rectangle around player
+# surfaces place object according to top left corner
+# rectangles let you specify where to place which dot where
+# top left corner, mid top, top right corner
+# left, center, right
+# bottom left corner, mid bottom, bottom right corner
+
 
 # while loop needed to make pygame display window stay open forever
 while True:
@@ -65,10 +80,18 @@ while True:
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
     screen.blit(text_surface, (300, 50))
-    snail_x_position -= 4  # minus to make it move left
-    if snail_x_position < 0:
-        snail_x_position = 800
-    screen.blit(snail_suface, (snail_x_position, 250))
+    # snail_x_position -= 4  # minus to make it move left
+    # if snail_x_position < 0:
+    #     snail_x_position = 800
+    snail_rect.x -= 4
+    if snail_rect.right < 0:
+        snail_rect.left = 800
+    screen.blit(snail_surface, snail_rect)
+
+    # Don't move the player surface, BUT RATHER, the rectangle containing the surface
+    # player_rect.left += 1
+    # print(player_rect.left)  # or print where the left edge of the player_rect is!
+    screen.blit(player_surf, player_rect)
 
     # draw all our elements
     # update everything.
