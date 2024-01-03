@@ -26,7 +26,7 @@ clock = pygame.time.Clock()
 # test_surface.fill("Red")
 
 # REGULAR SURFACE WITH IMAGE
-test_surface = pygame.image.load()
+test_surface = pygame.image.load("./UltimatePygameIntro-main/graphics/Sky.png")
 
 
 # while loop needed to make pygame display window stay open forever
