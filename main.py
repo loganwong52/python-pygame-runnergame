@@ -26,8 +26,8 @@ clock = pygame.time.Clock()
 # test_surface.fill("Red")
 
 # REGULAR SURFACE WITH IMAGE
-test_surface = pygame.image.load("./UltimatePygameIntro-main/graphics/Sky.png")
-
+sky_surface = pygame.image.load("./UltimatePygameIntro-main/graphics/Sky.png")
+ground_surface = pygame.image.load("./UltimatePygameIntro-main/graphics/ground.png")
 
 # while loop needed to make pygame display window stay open forever
 while True:
@@ -41,7 +41,8 @@ while True:
         # Attach test_surface to the DISPLAY surface
         # BLock Image Transfer aka "blit" command
         # (0, 0) is the TOP LEFT corner of the window
-        screen.blit(test_surface, (200, 100))
+        screen.blit(sky_surface, (0, 0))
+        screen.blit(ground_surface, (0, 300))
 
         # draw all our elements
         # update everything.
