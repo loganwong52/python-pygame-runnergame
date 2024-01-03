@@ -1,12 +1,13 @@
 # Needs to use bash
 # in bash, pip install pygame
-# then, press green triangle run buttons
+# then, press green triangle run buttons (I've done this already)
+
 import pygame
 from sys import exit
 
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
-pygame.display.set_caption('Runner')
+pygame.display.set_caption("Runner")
 
 # Create the clock object for the framerate
 clock = pygame.time.Clock()
@@ -17,7 +18,7 @@ clock = pygame.time.Clock()
 # Regular surface: a single image that needs the display surface for the user to see it (individual images on the canvas)
 
 test_surface = pygame.Surface((100, 200))
-test_surface.fill('Red')
+test_surface.fill("Red")
 
 
 while True:
@@ -26,7 +27,6 @@ while True:
             pygame.quit()
             # Use exit so code outside the for loop won't run once you call quit()
             exit()
-
 
         # block image transfer
         # (0, 0) is the TOP LEFT corner of the window
