@@ -48,7 +48,6 @@ text_surface = test_font.render(text, anti_alias, text_color)
 
 # snail animation
 snail_surface = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
-# snail_x_position = 600
 snail_rect = snail_surface.get_rect(midbottom=(600, 300))
 
 # player and Rectangle
@@ -80,9 +79,8 @@ while True:
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
     screen.blit(text_surface, (300, 50))
-    # snail_x_position -= 4  # minus to make it move left
-    # if snail_x_position < 0:
-    #     snail_x_position = 800
+
+    # Animate the snail to move left
     snail_rect.x -= 4
     if snail_rect.right < 0:
         snail_rect.left = 800
