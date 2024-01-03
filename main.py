@@ -1,11 +1,13 @@
 # Needs to use bash
 # in bash, pip install pygame
 # then, press green triangle run buttons (I've done this already)
+# run code in terminal with:   python3 main.py
 
 import pygame
 from sys import exit
 
-pygame.init()
+pygame.init()  # necessary
+# set_mode needs a tuple: (width, height)
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption("Runner")
 
@@ -17,18 +19,27 @@ clock = pygame.time.Clock()
 # Display surface: The game window (the actual canvas)
 # Regular surface: a single image that needs the display surface for the user to see it (individual images on the canvas)
 
-test_surface = pygame.Surface((100, 200))
-test_surface.fill("Red")
+# EXAMPLE REGULAR SURFACE
+# w = 100
+# h = 200
+# test_surface = pygame.Surface((w, h))
+# test_surface.fill("Red")
+
+# REGULAR SURFACE WITH IMAGE
+test_surface = pygame.image.load()
 
 
+# while loop needed to make pygame display window stay open forever
 while True:
+    # Find the specific event that lets users closer windows
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
+            pygame.quit()  # the opposite of pygame.init()
             # Use exit so code outside the for loop won't run once you call quit()
             exit()
 
-        # block image transfer
+        # Attach test_surface to the DISPLAY surface
+        # BLock Image Transfer aka "blit" command
         # (0, 0) is the TOP LEFT corner of the window
         screen.blit(test_surface, (200, 100))
 
