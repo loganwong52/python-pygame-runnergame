@@ -68,6 +68,9 @@ player_rect = player_surf.get_rect(
 # PYGAME.DRAW
 # draw shapes, lines, or points
 
+# PLAYER GRAVITY
+player_gravity = 0
+
 # while loop needed to make pygame display window stay open forever
 while True:
     # Find the specific event that lets users closer windows
@@ -86,6 +89,15 @@ while True:
         #     print("mouse up")
         # if event.type == pygame.MOUSEBUTTONDOWN:
         #     print("mouse down")
+
+        if event.type == pygame.KEYDOWN:
+            # print("key down")
+            if event.key == pygame.K_SPACE:
+                # print("jump")
+                player_gravity = -20
+
+        # if event.type == pygame.KEYUP:
+        # print("key up")
 
     # Attach test_surface to the DISPLAY surface
     # BLock Image Transfer aka "blit" command
@@ -108,10 +120,20 @@ while True:
         snail_rect.left = 800
     screen.blit(snail_surface, snail_rect)
 
+    # PLAYER
     # Don't move the player surface, BUT RATHER, the rectangle containing the surface
     # player_rect.left += 1
     # print(player_rect.left)  # or print where the left edge of the player_rect is!
+    player_gravity += 1
+    player_rect.y += player_gravity
     screen.blit(player_surf, player_rect)
+
+    # Keyboard input by using pygame.key
+    # keys = pygame.key.get_pressed()
+    # # a tuple with 0's or 1's if a button is pressed... a dictionary!
+    # space_btn_pressed = keys[pygame.K_SPACE]
+    # if space_btn_pressed:
+    #     print("jump")
 
     # RECTANGLE COLLISIONS
     # returns 0 if no collision or 1 if collision

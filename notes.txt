@@ -1,0 +1,34 @@
+Player character
+
+Keyboard input
+space = jump
+gravity needed jump and fall
+Floor needs to be created so character won't fall
+
+keyboard input
+- pygame.key
+- event loop
+
+PYGAME.KEY:
+keys = pygame.key.get_pressed()
+# a tuple with 0's or 1's if a button is pressed... a dictionary!
+space_btn_pressed = keys[pygame.K_SPACE]
+if space_btn_pressed:
+    print("jump")
+
+
+EVENT LOOP:
+1. check if any button was pressed
+2. work with a specific key
+
+if event.type == pygame.KEYDOWN:
+    if event.key == pygame.K_SPACE:
+        # do stuff here, like character jumping
+
+
+GRAVITY
+things fall exponentially, not linearlly
+gravity += some value
+player.y += gravity
+
+
