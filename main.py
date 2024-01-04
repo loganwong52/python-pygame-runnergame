@@ -72,6 +72,16 @@ while True:
             pygame.quit()  # the opposite of pygame.init()
             # Use exit so code outside the for loop won't run once you call quit()
             exit()
+        # if event.type == pygame.MOUSEMOTION:
+        #     # only triggers if you move the mouse
+        #     mouse_position = event.pos
+        #     player_hit_mouse = player_rect.collidepoint(mouse_position)
+        #     if player_hit_mouse:
+        #         print("collision")
+        # if event.type == pygame.MOUSEBUTTONUP:
+        #     print("mouse up")
+        # if event.type == pygame.MOUSEBUTTONDOWN:
+        #     print("mouse down")
 
     # Attach test_surface to the DISPLAY surface
     # BLock Image Transfer aka "blit" command
@@ -91,9 +101,23 @@ while True:
     # print(player_rect.left)  # or print where the left edge of the player_rect is!
     screen.blit(player_surf, player_rect)
 
-    # draw all our elements
-    # update everything.
-    pygame.display.update()
+    # RECTANGLE COLLISIONS
+    # returns 0 if no collision or 1 if collision
+    # snail_hit_player = player_rect.colliderect(snail_rect)
+    # if snail_hit_player:
+    #     print("collision!")
 
-    # This while true loop shouldn't run faster than 60 frames per second (a ceiling)
+    # MOUSE COLLISION
+    # collidepoint() takes in a tuple (x, y), mouse_pos is a tuple
+    # mouse_pos = pygame.mouse.get_pos()
+    # player_hit_mouse = player_rect.collidepoint(mouse_pos)
+    # if player_hit_mouse:
+    #     # print("collision")
+    #     mouse_btns_bools = pygame.mouse.get_pressed()
+    #     # (left clicked?, middle clicked?, right clicked?)
+    #     print(mouse_btns_bools)
+
+    # draw all our elements; update everything.
+    pygame.display.update()
+    # frames per second ceiling: shouldn't run faster than 60 fps)
     clock.tick(60)
