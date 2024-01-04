@@ -80,16 +80,23 @@ while True:
             # Use exit so code outside the for loop won't run once you call quit()
             exit()
         # if event.type == pygame.MOUSEMOTION:
-        #     # only triggers if you move the mouse
-        #     mouse_position = event.pos
-        #     player_hit_mouse = player_rect.collidepoint(mouse_position)
-        #     if player_hit_mouse:
+        # only triggers if you move the mouse
+        # mouse_position = event.pos
+        # player_hit_mouse = player_rect.collidepoint(mouse_position)
+        # if player_hit_mouse:
         #         print("collision")
         # if event.type == pygame.MOUSEBUTTONUP:
-        #     print("mouse up")
+        # print("mouse up")
         # if event.type == pygame.MOUSEBUTTONDOWN:
         #     print("mouse down")
 
+        # Player jumps if Mouse clicks on him
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            player_hit_mouse = player_rect.collidepoint(event.pos)
+            if player_hit_mouse:
+                player_gravity = -20
+
+        # Player jumps is space bar is pressed
         if event.type == pygame.KEYDOWN:
             # print("key down")
             if event.key == pygame.K_SPACE:
@@ -124,8 +131,11 @@ while True:
     # Don't move the player surface, BUT RATHER, the rectangle containing the surface
     # player_rect.left += 1
     # print(player_rect.left)  # or print where the left edge of the player_rect is!
+    print(player_gravity)
     player_gravity += 1
     player_rect.y += player_gravity
+    if player_rect.bottom >= 300:
+        player_rect.bottom = 300
     screen.blit(player_surf, player_rect)
 
     # Keyboard input by using pygame.key
