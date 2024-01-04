@@ -42,9 +42,11 @@ ground_surface = loadify("./UltimatePygameIntro-main/graphics/ground.png")
 # 1. Create a font  2. write text on a surface   3. blit that surface
 text = "Logan's Game"
 anti_alias = False  # looks pixelated or smooth
-text_color = "black"
-text_surface = test_font.render(text, anti_alias, text_color)
-
+# text_color = "black"
+text_color = (64, 64, 64)
+# text_surf = test_font.render(text, anti_alias, text_color)
+score_surf = test_font.render(text, anti_alias, text_color)
+score_rect = score_surf.get_rect(center=(400, 50))
 
 # snail animation
 snail_surface = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
@@ -63,6 +65,8 @@ player_rect = player_surf.get_rect(
 # left, center, right
 # bottom left corner, mid bottom, bottom right corner
 
+# PYGAME.DRAW
+# draw shapes, lines, or points
 
 # while loop needed to make pygame display window stay open forever
 while True:
@@ -88,7 +92,15 @@ while True:
     # (0, 0) is the TOP LEFT corner of the window
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
-    screen.blit(text_surface, (300, 50))
+
+    # .draw and specify shape. Takes in what to draw ON, color, what to draw
+    # pygame.draw.line(screen, "Gold", (0, 0), pygame.mouse.get_pos(), width=10)
+    pygame.draw.rect(screen, "#c0e8ec", score_rect)  # inner
+    pygame.draw.rect(screen, "#c0e8ec", score_rect, width=10)  # boarder
+
+    # Draw a circle from scratch
+    # pygame.draw.ellipse(screen, "Brown", pygame.Rect(50, 200, 100, 100))
+    screen.blit(score_surf, score_rect)
 
     # Animate the snail to move left
     snail_rect.x -= 4
