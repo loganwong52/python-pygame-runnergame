@@ -26,6 +26,25 @@ if event.type == pygame.KEYDOWN:
         # do stuff here, like character jumping
 
 
+ # .draw and specify shape. Takes in what to draw ON, color, what to draw
+# pygame.draw.line(screen, "Gold", (0, 0), pygame.mouse.get_pos(), width=10)
+# pygame.draw.rect(screen, "#c0e8ec", score_rect)  # inner
+# pygame.draw.rect(screen, "#c0e8ec", score_rect, width=10)  # boarder
+
+# Draw a circle from scratch
+# pygame.draw.ellipse(screen, "Brown", pygame.Rect(50, 200, 100, 100))
+# screen.blit(score_surf, score_rect)
+
+
+# Keyboard input by using pygame.key
+# keys = pygame.key.get_pressed()
+# # a tuple with 0's or 1's if a button is pressed... a dictionary!
+# space_btn_pressed = keys[pygame.K_SPACE]
+# if space_btn_pressed:
+#     print("jump")
+
+
+
 GRAVITY
 things fall exponentially, not linearlly
 gravity += some value
@@ -35,6 +54,27 @@ CREATING THE FLOOR
 check the y-position of the player
 simulate the collision
 never let player go below a certain y-value
+
+# MOUSE COLLISION
+# collidepoint() takes in a tuple (x, y), mouse_pos is a tuple
+# mouse_pos = pygame.mouse.get_pos()
+# player_hit_mouse = player_rect.collidepoint(mouse_pos)
+# if player_hit_mouse:
+#     # print("collision")
+#     mouse_btns_bools = pygame.mouse.get_pressed()
+#     # (left clicked?, middle clicked?, right clicked?)
+#     print(mouse_btns_bools)
+
+# if event.type == pygame.MOUSEMOTION:
+# only triggers if you move the mouse
+# mouse_position = event.pos
+# player_hit_mouse = player_rect.collidepoint(mouse_position)
+# if player_hit_mouse:
+#         print("collision")
+# if event.type == pygame.MOUSEBUTTONUP:
+# print("mouse up")
+# if event.type == pygame.MOUSEBUTTONDOWN:
+#     print("mouse down")
 
 GAME STATES
 game and game over
@@ -48,3 +88,7 @@ displays milliseconds since pygame started
 1. update score every frame
 2. put score on a surface
 3. display said surface
+
+timer: custom 'user' event that's triggered in certain intervals
+1. create this event
+2. tell pygame when to trigger it

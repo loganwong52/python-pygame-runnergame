@@ -6,6 +6,24 @@
 import pygame
 from image_helper import loadify
 from sys import exit
+from random import randint
+
+
+def obstacle_movement(obstacle_list):
+    if obstacle_list:
+        # Make every obstacle move left 5 spaces
+        for obstacle_rect in obstacle_list:
+            obstacle_rect.x -= 5
+            if obstacle_rect.bottom == 300:
+                screen.blit(snail_surf, obstacle_rect)
+            else:
+                screen.blit(fly_surf, obstacle_rect)
+
+        # Only save obstacles on screen
+        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > 0]
+
+        return obstacle_list
+    return []
 
 
 def display_score():
@@ -75,10 +93,6 @@ game_title_rect = game_title_surf.get_rect(center=(400, 80))
 game_msg = test_font.render("Press space to start", False, (111, 196, 169))
 game_msg_rect = game_msg.get_rect(center=(400, 320))
 
-# snail animation
-snail_surface = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
-snail_rect = snail_surface.get_rect(midbottom=(600, 300))
-
 # player and Rectangle
 player_surf = loadify("./UltimatePygameIntro-main/graphics/Player/player_walk_1.png")
 player_x = 80
@@ -105,27 +119,33 @@ player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
 player_stand_rect = player_stand.get_rect(center=(400, 200))
 
 
+# Timer for OBSTACLES
+obstacle_timer = pygame.USEREVENT + 1
+# Takes 2 args: the event, and how often to trigger it in ms
+pygame.time.set_timer(obstacle_timer, 1500)
+# create list of obstacles
+# when event is triggered, it creates a new obstacle rectangle
+# move the rectangle left on every frame
+
+# snail animation
+snail_surf = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
+fly_surf = loadify("./UltimatePygameIntro-main/graphics/Fly/Fly1.png")
+
+obstacle_rect_list = []
+
 # while loop needed to make pygame display window stay open forever
 while True:
     # Find the specific event that lets users closer windows
+    # THE EVENT LOOP
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()  # the opposite of pygame.init()
             # Use exit so code outside the for loop won't run once you call quit()
             exit()
-        # if event.type == pygame.MOUSEMOTION:
-        # only triggers if you move the mouse
-        # mouse_position = event.pos
-        # player_hit_mouse = player_rect.collidepoint(mouse_position)
-        # if player_hit_mouse:
-        #         print("collision")
-        # if event.type == pygame.MOUSEBUTTONUP:
-        # print("mouse up")
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     print("mouse down")
 
         if game_active:
             # Player jumps if Mouse clicks on him
+            # collidepoint() takes in a tuple (x, y), mouse_pos is a tuple
             if event.type == pygame.MOUSEBUTTONDOWN:
                 player_hit_mouse = player_rect.collidepoint(event.pos)
                 if player_hit_mouse and player_rect.bottom >= 300:
@@ -133,9 +153,7 @@ while True:
 
             # Player jumps is space bar is pressed
             if event.type == pygame.KEYDOWN:
-                # print("key down")
                 if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
-                    # print("jump")
                     player_gravity = -20
 
             # if event.type == pygame.KEYUP:
@@ -143,8 +161,18 @@ while True:
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
-                snail_rect.left = 800
                 start_time = int(pygame.time.get_ticks() / 1000)
+
+        if event.type == obstacle_timer and game_active:
+            if randint(0, 2):
+                # x-value should be between 900 and 1100
+                obstacle_rect_list.append(
+                    snail_surf.get_rect(bottomright=(randint(900, 1100), 300))
+                )
+            else:
+                obstacle_rect_list.append(
+                    fly_surf.get_rect(bottomright=(randint(900, 1100), 210))
+                )
 
     if game_active:
         # Attach test_surface to the DISPLAY surface
@@ -154,21 +182,11 @@ while True:
         screen.blit(ground_surface, (0, 300))
         score = display_score()
 
-        # .draw and specify shape. Takes in what to draw ON, color, what to draw
-        # pygame.draw.line(screen, "Gold", (0, 0), pygame.mouse.get_pos(), width=10)
-        # pygame.draw.rect(screen, "#c0e8ec", score_rect)  # inner
-        # pygame.draw.rect(screen, "#c0e8ec", score_rect, width=10)  # boarder
-
-        # Draw a circle from scratch
-        # pygame.draw.ellipse(screen, "Brown", pygame.Rect(50, 200, 100, 100))
-        # screen.blit(score_surf, score_rect)
-        display_score()
-
         # Animate the snail to move left
-        snail_rect.x -= 4
-        if snail_rect.right < 0:
-            snail_rect.left = 800
-        screen.blit(snail_surface, snail_rect)
+        # snail_rect.x -= 4
+        # if snail_rect.right < 0:
+        #     snail_rect.left = 800
+        # screen.blit(snail_surface, snail_rect)
 
         # PLAYER
         # Don't move the player surface, BUT RATHER, the rectangle containing the surface
@@ -180,28 +198,14 @@ while True:
             player_rect.bottom = 300
         screen.blit(player_surf, player_rect)
 
-        # Keyboard input by using pygame.key
-        # keys = pygame.key.get_pressed()
-        # # a tuple with 0's or 1's if a button is pressed... a dictionary!
-        # space_btn_pressed = keys[pygame.K_SPACE]
-        # if space_btn_pressed:
-        #     print("jump")
+        # OBSTACLE COLLISIONS
+        obstacle_rect_list = obstacle_movement(obstacle_rect_list)
 
         # RECTANGLE COLLISIONS
         # returns 0 if no collision or 1 if collision
-        snail_hit_player = player_rect.colliderect(snail_rect)
-        if snail_hit_player:
-            game_active = False
-
-        # MOUSE COLLISION
-        # collidepoint() takes in a tuple (x, y), mouse_pos is a tuple
-        # mouse_pos = pygame.mouse.get_pos()
-        # player_hit_mouse = player_rect.collidepoint(mouse_pos)
-        # if player_hit_mouse:
-        #     # print("collision")
-        #     mouse_btns_bools = pygame.mouse.get_pressed()
-        #     # (left clicked?, middle clicked?, right clicked?)
-        #     print(mouse_btns_bools)
+        # snail_hit_player = player_rect.colliderect(snail_rect)
+        # if snail_hit_player:
+        # game_active = False
 
     else:
         # Populate start/game over screen
