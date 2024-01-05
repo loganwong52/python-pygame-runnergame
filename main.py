@@ -17,6 +17,7 @@ def display_score():
     score_surf = test_font.render(f"Score: {current_time}", False, (64, 64, 64))
     score_rect = score_surf.get_rect(center=(400, 50))
     screen.blit(score_surf, score_rect)
+    return current_time
 
 
 pygame.init()  # necessary
@@ -37,8 +38,9 @@ test_font = pygame.font.Font(font_type, font_size)
 # Controls game states
 game_active = False
 
-# Player scoree
+# Player score
 start_time = 0
+score = 0
 
 # SURFACE
 # User sees all things on a surface
@@ -150,6 +152,7 @@ while True:
         # (0, 0) is the TOP LEFT corner of the window
         screen.blit(sky_surface, (0, 0))
         screen.blit(ground_surface, (0, 300))
+        score = display_score()
 
         # .draw and specify shape. Takes in what to draw ON, color, what to draw
         # pygame.draw.line(screen, "Gold", (0, 0), pygame.mouse.get_pos(), width=10)
@@ -201,10 +204,18 @@ while True:
         #     print(mouse_btns_bools)
 
     else:
+        # Populate start/game over screen
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
         screen.blit(game_title_surf, game_title_rect)
-        screen.blit(game_msg, game_msg_rect)
+
+        # Show instructions if score is 0, otherwise show the score
+        score_msg = test_font.render(f"Your score: {score}", False, (111, 196, 169))
+        score_msg_rect = score_msg.get_rect(center=(400, 330))
+        if score == 0:
+            screen.blit(game_msg, game_msg_rect)
+        else:
+            screen.blit(score_msg, score_msg_rect)
 
     # draw all our elements; update everything.
     pygame.display.update()
