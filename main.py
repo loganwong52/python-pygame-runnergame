@@ -145,8 +145,6 @@ player_rect = player_surf.get_rect(
 # left, center, right
 # bottom left corner, mid bottom, bottom right corner
 
-# PYGAME.DRAW
-# draw shapes, lines, or points
 
 # PLAYER GRAVITY
 player_gravity = 0
@@ -158,6 +156,19 @@ player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
 player_stand_rect = player_stand.get_rect(center=(400, 200))
 
 
+# snail animation
+snail_frame_1 = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
+snail_frame_2 = loadify("./UltimatePygameIntro-main/graphics/snail/snail2.png")
+snail_frames = [snail_frame_1, snail_frame_2]
+snail_frame_index = 0
+snail_surf = snail_frames[snail_frame_index]
+
+fly_frame_1 = loadify("./UltimatePygameIntro-main/graphics/Fly/Fly1.png")
+fly_frame_2 = loadify("./UltimatePygameIntro-main/graphics/Fly/Fly2.png")
+fly_frames = [fly_frame_1, fly_frame_2]
+fly_frame_index = 0
+fly_surf = fly_frames[fly_frame_index]
+
 # Timer for OBSTACLES
 obstacle_timer = pygame.USEREVENT + 1
 # Takes 2 args: the event, and how often to trigger it in ms
@@ -166,9 +177,12 @@ pygame.time.set_timer(obstacle_timer, 1500)
 # when event is triggered, it creates a new obstacle rectangle
 # move the rectangle left on every frame
 
-# snail animation
-snail_surf = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
-fly_surf = loadify("./UltimatePygameIntro-main/graphics/Fly/Fly1.png")
+snail_animation_timer = pygame.USEREVENT + 2
+pygame.time.set_timer(snail_animation_timer, 500)
+
+fly_animation_timer = pygame.USEREVENT + 3
+pygame.time.set_timer(fly_animation_timer, 200)
+
 
 obstacle_rect_list = []
 
@@ -195,23 +209,36 @@ while True:
                 if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
                     player_gravity = -20
 
-            # if event.type == pygame.KEYUP:
-            # print("key up")
+            # Spawn obstacles according to timer
+            if event.type == obstacle_timer:
+                if randint(0, 2):
+                    # x-value should be between 900 and 1100
+                    obstacle_rect_list.append(
+                        snail_surf.get_rect(bottomright=(randint(900, 1100), 300))
+                    )
+                else:
+                    obstacle_rect_list.append(
+                        fly_surf.get_rect(bottomright=(randint(900, 1100), 210))
+                    )
+
+            # Animate obstacles according to their timers
+            if event.type == snail_animation_timer:
+                if snail_frame_index:
+                    snail_frame_index = 0
+                else:
+                    snail_frame_index = 1
+                snail_surf = snail_frames[snail_frame_index]
+            if event.type == fly_animation_timer:
+                if fly_frame_index:
+                    fly_frame_index = 0
+                else:
+                    fly_frame_index = 1
+                fly_surf = fly_frames[fly_frame_index]
+
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
                 start_time = int(pygame.time.get_ticks() / 1000)
-
-        if event.type == obstacle_timer and game_active:
-            if randint(0, 2):
-                # x-value should be between 900 and 1100
-                obstacle_rect_list.append(
-                    snail_surf.get_rect(bottomright=(randint(900, 1100), 300))
-                )
-            else:
-                obstacle_rect_list.append(
-                    fly_surf.get_rect(bottomright=(randint(900, 1100), 210))
-                )
 
     if game_active:
         # Attach test_surface to the DISPLAY surface

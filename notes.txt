@@ -26,7 +26,9 @@ if event.type == pygame.KEYDOWN:
         # do stuff here, like character jumping
 
 
- # .draw and specify shape. Takes in what to draw ON, color, what to draw
+# PYGAME.DRAW
+# draw shapes, lines, or points
+# .draw and specify shape. Takes in what to draw ON, color, what to draw
 # pygame.draw.line(screen, "Gold", (0, 0), pygame.mouse.get_pos(), width=10)
 # pygame.draw.rect(screen, "#c0e8ec", score_rect)  # inner
 # pygame.draw.rect(screen, "#c0e8ec", score_rect, width=10)  # boarder
@@ -95,5 +97,10 @@ timer: custom 'user' event that's triggered in certain intervals
 
 ANIMATION
 player animation: create our own timer that updates the surface
+jumping is just switching surface from walk to jump
+walking is switching from image 1 to 2 after 10 frames
+
 obstacle animation: use the inbuild timers to update all obstacle surfaces
+using the inbuild timer, like the one we used to spawn the obstacle
+everytime it triggers we update all the surfaces for all flies or all snails
 
