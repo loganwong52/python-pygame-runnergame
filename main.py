@@ -9,7 +9,20 @@ from sys import exit
 from random import randint
 
 
+def collisions(player, obstacles):
+    if obstacles:
+        # Make every obstacle move left 5 spaces
+        for obstacle_rect in obstacles:
+            if player.colliderect(obstacle_rect):
+                # you want to set game_active to False...
+                return False
+    return True
+
+
 def obstacle_movement(obstacle_list):
+    """
+    Controls all obstacle movement
+    """
     if obstacle_list:
         # Make every obstacle move left 5 spaces
         for obstacle_rect in obstacle_list:
@@ -206,12 +219,16 @@ while True:
         # snail_hit_player = player_rect.colliderect(snail_rect)
         # if snail_hit_player:
         # game_active = False
+        game_active = collisions(player_rect, obstacle_rect_list)
 
     else:
         # Populate start/game over screen
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
         screen.blit(game_title_surf, game_title_rect)
+        obstacle_rect_list.clear()  # remove all obstacles
+        player_rect.midbottom = (80, 300)  # ensure player starts on ground
+        player_gravity = 0
 
         # Show instructions if score is 0, otherwise show the score
         score_msg = test_font.render(f"Your score: {score}", False, (111, 196, 169))
