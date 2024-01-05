@@ -43,3 +43,8 @@ if game_active:
 else:
  game_over
 
+pygame.time.get_ticks()
+displays milliseconds since pygame started
+1. update score every frame
+2. put score on a surface
+3. display said surface

@@ -7,6 +7,18 @@ import pygame
 from image_helper import loadify
 from sys import exit
 
+
+def display_score():
+    """
+    Displays the time in seconds the player has been playing.
+    This acts as the player's score.
+    """
+    current_time = int(pygame.time.get_ticks() / 1000) - start_time
+    score_surf = test_font.render(f"Score: {current_time}", False, (64, 64, 64))
+    score_rect = score_surf.get_rect(center=(400, 50))
+    screen.blit(score_surf, score_rect)
+
+
 pygame.init()  # necessary
 # set_mode needs a tuple: (width, height)
 # CREATE DISPLAY SURFACE
@@ -24,6 +36,9 @@ test_font = pygame.font.Font(font_type, font_size)
 
 # Controls game states
 game_active = True
+
+# Player scoree
+start_time = 0
 
 # SURFACE
 # User sees all things on a surface
@@ -112,6 +127,7 @@ while True:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
                 snail_rect.left = 800
+                start_time = int(pygame.time.get_ticks() / 1000)
 
     if game_active:
         # Attach test_surface to the DISPLAY surface
@@ -122,12 +138,13 @@ while True:
 
         # .draw and specify shape. Takes in what to draw ON, color, what to draw
         # pygame.draw.line(screen, "Gold", (0, 0), pygame.mouse.get_pos(), width=10)
-        pygame.draw.rect(screen, "#c0e8ec", score_rect)  # inner
-        pygame.draw.rect(screen, "#c0e8ec", score_rect, width=10)  # boarder
+        # pygame.draw.rect(screen, "#c0e8ec", score_rect)  # inner
+        # pygame.draw.rect(screen, "#c0e8ec", score_rect, width=10)  # boarder
 
         # Draw a circle from scratch
         # pygame.draw.ellipse(screen, "Brown", pygame.Rect(50, 200, 100, 100))
-        screen.blit(score_surf, score_rect)
+        # screen.blit(score_surf, score_rect)
+        display_score()
 
         # Animate the snail to move left
         snail_rect.x -= 4
