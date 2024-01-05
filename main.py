@@ -22,6 +22,8 @@ font_type = "./UltimatePygameIntro-main/font/Pixeltype.ttf"
 font_size = 50
 test_font = pygame.font.Font(font_type, font_size)
 
+# Controls game states
+game_active = True
 
 # SURFACE
 # User sees all things on a surface
@@ -106,60 +108,63 @@ while True:
         # if event.type == pygame.KEYUP:
         # print("key up")
 
-    # Attach test_surface to the DISPLAY surface
-    # BLock Image Transfer aka "blit" command
-    # (0, 0) is the TOP LEFT corner of the window
-    screen.blit(sky_surface, (0, 0))
-    screen.blit(ground_surface, (0, 300))
+    if game_active:
+        # Attach test_surface to the DISPLAY surface
+        # BLock Image Transfer aka "blit" command
+        # (0, 0) is the TOP LEFT corner of the window
+        screen.blit(sky_surface, (0, 0))
+        screen.blit(ground_surface, (0, 300))
 
-    # .draw and specify shape. Takes in what to draw ON, color, what to draw
-    # pygame.draw.line(screen, "Gold", (0, 0), pygame.mouse.get_pos(), width=10)
-    pygame.draw.rect(screen, "#c0e8ec", score_rect)  # inner
-    pygame.draw.rect(screen, "#c0e8ec", score_rect, width=10)  # boarder
+        # .draw and specify shape. Takes in what to draw ON, color, what to draw
+        # pygame.draw.line(screen, "Gold", (0, 0), pygame.mouse.get_pos(), width=10)
+        pygame.draw.rect(screen, "#c0e8ec", score_rect)  # inner
+        pygame.draw.rect(screen, "#c0e8ec", score_rect, width=10)  # boarder
 
-    # Draw a circle from scratch
-    # pygame.draw.ellipse(screen, "Brown", pygame.Rect(50, 200, 100, 100))
-    screen.blit(score_surf, score_rect)
+        # Draw a circle from scratch
+        # pygame.draw.ellipse(screen, "Brown", pygame.Rect(50, 200, 100, 100))
+        screen.blit(score_surf, score_rect)
 
-    # Animate the snail to move left
-    snail_rect.x -= 4
-    if snail_rect.right < 0:
-        snail_rect.left = 800
-    screen.blit(snail_surface, snail_rect)
+        # Animate the snail to move left
+        snail_rect.x -= 4
+        if snail_rect.right < 0:
+            snail_rect.left = 800
+        screen.blit(snail_surface, snail_rect)
 
-    # PLAYER
-    # Don't move the player surface, BUT RATHER, the rectangle containing the surface
-    # player_rect.left += 1
-    # print(player_rect.left)  # or print where the left edge of the player_rect is!
-    player_gravity += 1
-    player_rect.y += player_gravity
-    if player_rect.bottom >= 300:
-        player_rect.bottom = 300
-    screen.blit(player_surf, player_rect)
+        # PLAYER
+        # Don't move the player surface, BUT RATHER, the rectangle containing the surface
+        # player_rect.left += 1
+        # print(player_rect.left)  # or print where the left edge of the player_rect is!
+        player_gravity += 1
+        player_rect.y += player_gravity
+        if player_rect.bottom >= 300:
+            player_rect.bottom = 300
+        screen.blit(player_surf, player_rect)
 
-    # Keyboard input by using pygame.key
-    # keys = pygame.key.get_pressed()
-    # # a tuple with 0's or 1's if a button is pressed... a dictionary!
-    # space_btn_pressed = keys[pygame.K_SPACE]
-    # if space_btn_pressed:
-    #     print("jump")
+        # Keyboard input by using pygame.key
+        # keys = pygame.key.get_pressed()
+        # # a tuple with 0's or 1's if a button is pressed... a dictionary!
+        # space_btn_pressed = keys[pygame.K_SPACE]
+        # if space_btn_pressed:
+        #     print("jump")
 
-    # RECTANGLE COLLISIONS
-    # returns 0 if no collision or 1 if collision
-    # snail_hit_player = player_rect.colliderect(snail_rect)
-    # if snail_hit_player:
-    #     print("collision!")
+        # RECTANGLE COLLISIONS
+        # returns 0 if no collision or 1 if collision
+        snail_hit_player = player_rect.colliderect(snail_rect)
+        if snail_hit_player:
+            game_active = False
 
-    # MOUSE COLLISION
-    # collidepoint() takes in a tuple (x, y), mouse_pos is a tuple
-    # mouse_pos = pygame.mouse.get_pos()
-    # player_hit_mouse = player_rect.collidepoint(mouse_pos)
-    # if player_hit_mouse:
-    #     # print("collision")
-    #     mouse_btns_bools = pygame.mouse.get_pressed()
-    #     # (left clicked?, middle clicked?, right clicked?)
-    #     print(mouse_btns_bools)
+        # MOUSE COLLISION
+        # collidepoint() takes in a tuple (x, y), mouse_pos is a tuple
+        # mouse_pos = pygame.mouse.get_pos()
+        # player_hit_mouse = player_rect.collidepoint(mouse_pos)
+        # if player_hit_mouse:
+        #     # print("collision")
+        #     mouse_btns_bools = pygame.mouse.get_pressed()
+        #     # (left clicked?, middle clicked?, right clicked?)
+        #     print(mouse_btns_bools)
 
+    else:
+        screen.fill("yellow")
     # draw all our elements; update everything.
     pygame.display.update()
     # frames per second ceiling: shouldn't run faster than 60 fps)

@@ -35,3 +35,11 @@ CREATING THE FLOOR
 check the y-position of the player
 simulate the collision
 never let player go below a certain y-value
+
+GAME STATES
+game and game over
+if game_active:
+ current game
+else:
+ game_over
+
