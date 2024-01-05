@@ -92,21 +92,26 @@ while True:
         # if event.type == pygame.MOUSEBUTTONDOWN:
         #     print("mouse down")
 
-        # Player jumps if Mouse clicks on him
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            player_hit_mouse = player_rect.collidepoint(event.pos)
-            if player_hit_mouse and player_rect.bottom >= 300:
-                player_gravity = -20
+        if game_active:
+            # Player jumps if Mouse clicks on him
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                player_hit_mouse = player_rect.collidepoint(event.pos)
+                if player_hit_mouse and player_rect.bottom >= 300:
+                    player_gravity = -20
 
-        # Player jumps is space bar is pressed
-        if event.type == pygame.KEYDOWN:
-            # print("key down")
-            if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
-                # print("jump")
-                player_gravity = -20
+            # Player jumps is space bar is pressed
+            if event.type == pygame.KEYDOWN:
+                # print("key down")
+                if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
+                    # print("jump")
+                    player_gravity = -20
 
-        # if event.type == pygame.KEYUP:
-        # print("key up")
+            # if event.type == pygame.KEYUP:
+            # print("key up")
+        else:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                game_active = True
+                snail_rect.left = 800
 
     if game_active:
         # Attach test_surface to the DISPLAY surface
@@ -165,6 +170,7 @@ while True:
 
     else:
         screen.fill("yellow")
+
     # draw all our elements; update everything.
     pygame.display.update()
     # frames per second ceiling: shouldn't run faster than 60 fps)
