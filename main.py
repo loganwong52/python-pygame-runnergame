@@ -35,7 +35,7 @@ font_size = 50
 test_font = pygame.font.Font(font_type, font_size)
 
 # Controls game states
-game_active = True
+game_active = False
 
 # Player scoree
 start_time = 0
@@ -65,6 +65,14 @@ text_color = (64, 64, 64)
 score_surf = test_font.render(text, anti_alias, text_color)
 score_rect = score_surf.get_rect(center=(400, 50))
 
+# Start screen title
+game_title_surf = test_font.render("Runner Game", False, (111, 196, 169))
+game_title_rect = game_title_surf.get_rect(center=(400, 80))
+
+# Start screen score
+game_msg = test_font.render("Press space to start", False, (111, 196, 169))
+game_msg_rect = game_msg.get_rect(center=(400, 320))
+
 # snail animation
 snail_surface = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
 snail_rect = snail_surface.get_rect(midbottom=(600, 300))
@@ -87,6 +95,13 @@ player_rect = player_surf.get_rect(
 
 # PLAYER GRAVITY
 player_gravity = 0
+
+
+# Start/game over page
+player_stand = loadify("./UltimatePygameIntro-main/graphics/Player/player_stand.png")
+player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
+player_stand_rect = player_stand.get_rect(center=(400, 200))
+
 
 # while loop needed to make pygame display window stay open forever
 while True:
@@ -186,7 +201,10 @@ while True:
         #     print(mouse_btns_bools)
 
     else:
-        screen.fill("yellow")
+        screen.fill((94, 129, 162))
+        screen.blit(player_stand, player_stand_rect)
+        screen.blit(game_title_surf, game_title_rect)
+        screen.blit(game_msg, game_msg_rect)
 
     # draw all our elements; update everything.
     pygame.display.update()
