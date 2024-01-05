@@ -9,7 +9,27 @@ from sys import exit
 from random import randint
 
 
+def player_animation():
+    """
+    Display jump surface if not on floor
+    Play walking animation if player is on floor
+    """
+    global player_surf, player_index
+    if player_rect.bottom < 300:
+        # jump
+        player_surf = player_jump
+    else:
+        # walk
+        player_index += 0.1
+        if player_index > len(player_walk):
+            player_index = 0
+        player_surf = player_walk[int(player_index)]
+
+
 def collisions(player, obstacles):
+    """
+    Checks if player collided with an obstacle
+    """
     if obstacles:
         # Make every obstacle move left 5 spaces
         for obstacle_rect in obstacles:
@@ -106,8 +126,14 @@ game_title_rect = game_title_surf.get_rect(center=(400, 80))
 game_msg = test_font.render("Press space to start", False, (111, 196, 169))
 game_msg_rect = game_msg.get_rect(center=(400, 320))
 
-# player and Rectangle
-player_surf = loadify("./UltimatePygameIntro-main/graphics/Player/player_walk_1.png")
+# player, animation, and Rectangle
+player_walk_1 = loadify("./UltimatePygameIntro-main/graphics/Player/player_walk_1.png")
+player_walk_2 = loadify("./UltimatePygameIntro-main/graphics/Player/player_walk_2.png")
+player_walk = [player_walk_1, player_walk_2]
+player_index = 0
+player_jump = loadify("./UltimatePygameIntro-main/graphics/Player/jump.png")
+
+player_surf = player_walk[player_index]
 player_x = 80
 player_y = 300
 player_rect = player_surf.get_rect(
@@ -209,6 +235,7 @@ while True:
         player_rect.y += player_gravity
         if player_rect.bottom >= 300:
             player_rect.bottom = 300
+        player_animation()
         screen.blit(player_surf, player_rect)
 
         # OBSTACLE COLLISIONS

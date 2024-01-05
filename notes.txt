@@ -92,3 +92,8 @@ displays milliseconds since pygame started
 timer: custom 'user' event that's triggered in certain intervals
 1. create this event
 2. tell pygame when to trigger it
+
+ANIMATION
+player animation: create our own timer that updates the surface
+obstacle animation: use the inbuild timers to update all obstacle surfaces
+
