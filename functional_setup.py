@@ -4,13 +4,9 @@
 # run code in terminal with:   python3 main.py
 
 import pygame
-from sys import exit
-from random import randint, choice
-
-# local imports
 from image_helper import loadify
-from player import Player
-from obstacle import Obstacle
+from sys import exit
+from random import randint
 
 
 def player_animation():
@@ -97,13 +93,6 @@ game_active = False
 start_time = 0
 score = 0
 
-# Create GroupSingle for the player, initialize a player
-player = pygame.sprite.GroupSingle()
-player.add(Player())
-
-# create Group for Obstacles
-obstacle_group = pygame.sprite.Group()
-
 # SURFACE
 # User sees all things on a surface
 # Display surface: The game window (the actual canvas) aka screen
@@ -137,11 +126,48 @@ game_title_rect = game_title_surf.get_rect(center=(400, 80))
 game_msg = test_font.render("Press space to start", False, (111, 196, 169))
 game_msg_rect = game_msg.get_rect(center=(400, 320))
 
+# player, animation, and Rectangle
+player_walk_1 = loadify("./UltimatePygameIntro-main/graphics/Player/player_walk_1.png")
+player_walk_2 = loadify("./UltimatePygameIntro-main/graphics/Player/player_walk_2.png")
+player_walk = [player_walk_1, player_walk_2]
+player_index = 0
+player_jump = loadify("./UltimatePygameIntro-main/graphics/Player/jump.png")
+
+player_surf = player_walk[player_index]
+player_x = 80
+player_y = 300
+player_rect = player_surf.get_rect(
+    midbottom=(player_x, player_y)
+)  # draw rectangle around player
+# surfaces place object according to top left corner
+# rectangles let you specify where to place which dot where
+# top left corner, mid top, top right corner
+# left, center, right
+# bottom left corner, mid bottom, bottom right corner
+
+
+# PLAYER GRAVITY
+player_gravity = 0
+
+
 # Start/game over page
 player_stand = loadify("./UltimatePygameIntro-main/graphics/Player/player_stand.png")
 player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
 player_stand_rect = player_stand.get_rect(center=(400, 200))
 
+
+# snail animation
+snail_frame_1 = loadify("./UltimatePygameIntro-main/graphics/snail/snail1.png")
+snail_frame_2 = loadify("./UltimatePygameIntro-main/graphics/snail/snail2.png")
+snail_frames = [snail_frame_1, snail_frame_2]
+snail_frame_index = 0
+snail_surf = snail_frames[snail_frame_index]
+
+fly_frame_1 = loadify("./UltimatePygameIntro-main/graphics/Fly/Fly1.png")
+fly_frame_2 = loadify("./UltimatePygameIntro-main/graphics/Fly/Fly2.png")
+fly_frames = [fly_frame_1, fly_frame_2]
+fly_frame_index = 0
+fly_surf = fly_frames[fly_frame_index]
 
 # Timer for OBSTACLES
 obstacle_timer = pygame.USEREVENT + 1
@@ -159,7 +185,6 @@ pygame.time.set_timer(fly_animation_timer, 200)
 
 
 obstacle_rect_list = []
-choices = ["fly", "snail", "snail", "snail"]
 
 # while loop needed to make pygame display window stay open forever
 while True:
@@ -186,16 +211,15 @@ while True:
 
             # Spawn obstacles according to timer
             if event.type == obstacle_timer:
-                obstacle_group.add(Obstacle(choice(choices)))
-                # if randint(0, 2):
-                #     # x-value should be between 900 and 1100
-                #     obstacle_rect_list.append(
-                #         snail_surf.get_rect(bottomright=(randint(900, 1100), 300))
-                #     )
-                # else:
-                #     obstacle_rect_list.append(
-                #         fly_surf.get_rect(bottomright=(randint(900, 1100), 210))
-                #     )
+                if randint(0, 2):
+                    # x-value should be between 900 and 1100
+                    obstacle_rect_list.append(
+                        snail_surf.get_rect(bottomright=(randint(900, 1100), 300))
+                    )
+                else:
+                    obstacle_rect_list.append(
+                        fly_surf.get_rect(bottomright=(randint(900, 1100), 210))
+                    )
 
             # Animate obstacles according to their timers
             if event.type == snail_animation_timer:
@@ -218,17 +242,38 @@ while True:
 
     if game_active:
         # Attach test_surface to the DISPLAY surface
+        # BLock Image Transfer aka "blit" command
+        # (0, 0) is the TOP LEFT corner of the window
         screen.blit(sky_surface, (0, 0))
         screen.blit(ground_surface, (0, 300))
         score = display_score()
 
-        # PLAYER
-        player.draw(screen)
-        player.update()
+        # Animate the snail to move left
+        # snail_rect.x -= 4
+        # if snail_rect.right < 0:
+        #     snail_rect.left = 800
+        # screen.blit(snail_surface, snail_rect)
 
-        # OBSTACLE
-        obstacle_group.draw(screen)
-        obstacle_group.update()
+        # PLAYER
+        # Don't move the player surface, BUT RATHER, the rectangle containing the surface
+        # player_rect.left += 1
+        # print(player_rect.left)  # or print where the left edge of the player_rect is!
+        player_gravity += 1
+        player_rect.y += player_gravity
+        if player_rect.bottom >= 300:
+            player_rect.bottom = 300
+        player_animation()
+        screen.blit(player_surf, player_rect)
+
+        # OBSTACLE COLLISIONS
+        obstacle_rect_list = obstacle_movement(obstacle_rect_list)
+
+        # RECTANGLE COLLISIONS
+        # returns 0 if no collision or 1 if collision
+        # snail_hit_player = player_rect.colliderect(snail_rect)
+        # if snail_hit_player:
+        # game_active = False
+        game_active = collisions(player_rect, obstacle_rect_list)
 
     else:
         # Populate start/game over screen
