@@ -26,8 +26,11 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midbottom=(randint(900, 1100), y_pos))
 
     def animation_state(self):
+        """
+        Animates the snail or the fly
+        """
         if self.type == "snail":
-            self.animation_index += 0.1
+            self.animation_index += 0.05
         else:
             self.animation_index += 0.25
 
@@ -43,5 +46,9 @@ class Obstacle(pygame.sprite.Sprite):
             self.kill()
 
     def update(self):
+        """
+        The only "public" function here besides init().
+        Called in main.py
+        """
         self.animation_state()
         self.rect.x -= 6

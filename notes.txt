@@ -135,3 +135,8 @@ spritecollide(sprite, group, dokill)
 sprite should be a sprite
 ex: since player is a GroupSingle, do player.sprite
 returns a list of collided sprites
+
+
+ADDING SOUND/music
+import a sound
+then use sound.play()

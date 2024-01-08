@@ -25,18 +25,27 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 0
 
     def player_input(self):
+        """
+        If space is pressed, the player moves up.
+        """
         keys = pygame.key.get_pressed()
-
         if keys[pygame.K_SPACE] and self.rect.bottom >= 300:
             self.gravity = -20
 
     def apply_gravity(self):
+        """
+        Player is always moving down, but won't fall below ground.
+        """
         self.gravity += 1
         self.rect.y += self.gravity
         if self.rect.bottom >= 300:
             self.rect.bottom = 300
 
     def animation_state(self):
+        """
+        Animate player jumping if not on the ground.
+        Or animate player walking if on the ground.
+        """
         if self.rect.bottom < 300:
             self.image = self.player_jump
         else:
@@ -46,6 +55,10 @@ class Player(pygame.sprite.Sprite):
             self.image = self.player_walk[int(self.player_index)]
 
     def update(self):
+        """
+        The only "public" function here besides init().
+        Called in main.py
+        """
         self.player_input()
         self.apply_gravity()
         self.animation_state()
