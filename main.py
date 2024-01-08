@@ -4,9 +4,12 @@
 # run code in terminal with:   python3 main.py
 
 import pygame
-from image_helper import loadify
 from sys import exit
 from random import randint
+
+# local imports
+from image_helper import loadify
+from player import Player
 
 
 def player_animation():
@@ -92,6 +95,10 @@ game_active = False
 # Player score
 start_time = 0
 score = 0
+
+# Create GroupSingle for the player, initialize a player
+player = pygame.sprite.GroupSingle()
+player.add(Player())
 
 # SURFACE
 # User sees all things on a surface
@@ -264,6 +271,8 @@ while True:
             player_rect.bottom = 300
         player_animation()
         screen.blit(player_surf, player_rect)
+        player.draw(screen)
+        player.update()
 
         # OBSTACLE COLLISIONS
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)

@@ -104,3 +104,28 @@ obstacle animation: use the inbuild timers to update all obstacle surfaces
 using the inbuild timer, like the one we used to spawn the obstacle
 everytime it triggers we update all the surfaces for all flies or all snails
 
+
+THE SPRITE CLASS
+A class that has a surface and a rectangle. Easy to draw & update.
+So player, snail, and fly should all be their own sprite class.
+
+place sprites in Group or GroupSingle
+Then, draw/update all sprites IN that group
+
+2 types of groups
+Group is a group for multiple sprites (good for flies and snails)
+GroupSingle is a group for a single sprite (good for the player)
+And for collisiosn to work, the sprites need to be
+
+player = pygame.sprite.GroupSingle()
+player.add(Player())
+Later, call .draw() and specify where to draw it
+player.draw(screen)
+
+Player() has its own functions you can call.
+But actually, you should only want to call 1 function that contains
+all the functions you'd want to call
+To call them, do:
+player.update()
+update calls player_input and apply_gravity
+
