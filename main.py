@@ -54,6 +54,11 @@ game_active = False
 start_time = 0
 score = 0
 
+# Music!
+bg_music = pygame.mixer.Sound("./UltimatePygameIntro-main/audio/music.wav")
+bg_music.set_volume(0.3)
+bg_music.play(loops=-1)  # minus 1 means loop the song forever
+
 # Create GroupSingle for the player, initialize a player
 player = pygame.sprite.GroupSingle()
 player.add(Player())

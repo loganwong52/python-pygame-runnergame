@@ -140,3 +140,8 @@ returns a list of collided sprites
 ADDING SOUND/music
 import a sound
 then use sound.play()
+
+bg_music = pygame.mixer.Sound("./UltimatePygameIntro-main/audio/music.wav")
+bg_music.set_volume(0.3) # takes in a value btwn 0 and 1
+bg_music.play(loops=-1)  # minus 1 means loop the song forever, this is an optional parameter
+

@@ -24,12 +24,18 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midbottom=(80, 300))
         self.gravity = 0
 
+        self.jump_sound = pygame.mixer.Sound(
+            "./UltimatePygameIntro-main/audio/jump.mp3"
+        )
+        self.jump_sound.set_volume(0.25)
+
     def player_input(self):
         """
         If space is pressed, the player moves up.
         """
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and self.rect.bottom >= 300:
+            self.jump_sound.play()
             self.gravity = -20
 
     def apply_gravity(self):
