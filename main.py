@@ -1,8 +1,4 @@
-# Needs to use bash
-# in bash, pip install pygame
-# then, press green triangle run buttons (I've done this already)
-# run code in terminal with:   python3 main.py
-
+# python imports
 import pygame
 from sys import exit
 from random import randint, choice
@@ -13,54 +9,17 @@ from player import Player
 from obstacle import Obstacle
 
 
-def player_animation():
+def collision_sprite():
     """
-    Display jump surface if not on floor
-    Play walking animation if player is on floor
+    player is a GroupSingle that is NOT a sprite
+    pass in sprite that collides
+    pass in Group of sprites that can be collided into
+    pass in if the obstacle should be deleted or not
     """
-    global player_surf, player_index
-    if player_rect.bottom < 300:
-        # jump
-        player_surf = player_jump
-    else:
-        # walk
-        player_index += 0.1
-        if player_index > len(player_walk):
-            player_index = 0
-        player_surf = player_walk[int(player_index)]
-
-
-def collisions(player, obstacles):
-    """
-    Checks if player collided with an obstacle
-    """
-    if obstacles:
-        # Make every obstacle move left 5 spaces
-        for obstacle_rect in obstacles:
-            if player.colliderect(obstacle_rect):
-                # you want to set game_active to False...
-                return False
+    if pygame.sprite.spritecollide(player.sprite, obstacle_group, True):
+        obstacle_group.empty()
+        return False
     return True
-
-
-def obstacle_movement(obstacle_list):
-    """
-    Controls all obstacle movement
-    """
-    if obstacle_list:
-        # Make every obstacle move left 5 spaces
-        for obstacle_rect in obstacle_list:
-            obstacle_rect.x -= 5
-            if obstacle_rect.bottom == 300:
-                screen.blit(snail_surf, obstacle_rect)
-            else:
-                screen.blit(fly_surf, obstacle_rect)
-
-        # Only save obstacles on screen
-        obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > 0]
-
-        return obstacle_list
-    return []
 
 
 def display_score():
@@ -75,8 +34,7 @@ def display_score():
     return current_time
 
 
-pygame.init()  # necessary
-# set_mode needs a tuple: (width, height)
+pygame.init()
 # CREATE DISPLAY SURFACE
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption("Runner")
@@ -85,7 +43,6 @@ pygame.display.set_caption("Runner")
 clock = pygame.time.Clock()
 
 # Create a font object
-# None is default font_type
 font_type = "./UltimatePygameIntro-main/font/Pixeltype.ttf"
 font_size = 50
 test_font = pygame.font.Font(font_type, font_size)
@@ -104,28 +61,14 @@ player.add(Player())
 # create Group for Obstacles
 obstacle_group = pygame.sprite.Group()
 
-# SURFACE
-# User sees all things on a surface
-# Display surface: The game window (the actual canvas) aka screen
-# Regular surface: a single image that needs the display surface for the user to see it (individual images on the canvas)
-
-# EXAMPLE REGULAR SURFACE
-# w = 100
-# h = 200
-# test_surface = pygame.Surface((w, h))
-# test_surface.fill("Red")
-
 # REGULAR SURFACES WITH IMAGE
 sky_surface = loadify("./UltimatePygameIntro-main/graphics/Sky.png")
 ground_surface = loadify("./UltimatePygameIntro-main/graphics/ground.png")
 
 # CREATING TEXT
-# 1. Create a font  2. write text on a surface   3. blit that surface
 text = "Logan's Game"
 anti_alias = False  # looks pixelated or smooth
-# text_color = "black"
-text_color = (64, 64, 64)
-# text_surf = test_font.render(text, anti_alias, text_color)
+text_color = (64, 64, 64)  # black
 score_surf = test_font.render(text, anti_alias, text_color)
 score_rect = score_surf.get_rect(center=(400, 50))
 
@@ -143,75 +86,31 @@ player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
 player_stand_rect = player_stand.get_rect(center=(400, 200))
 
 
-# Timer for OBSTACLES
+# Timers for OBSTACLES
 obstacle_timer = pygame.USEREVENT + 1
-# Takes 2 args: the event, and how often to trigger it in ms
 pygame.time.set_timer(obstacle_timer, 1500)
-# create list of obstacles
-# when event is triggered, it creates a new obstacle rectangle
-# move the rectangle left on every frame
-
 snail_animation_timer = pygame.USEREVENT + 2
 pygame.time.set_timer(snail_animation_timer, 500)
-
 fly_animation_timer = pygame.USEREVENT + 3
 pygame.time.set_timer(fly_animation_timer, 200)
 
-
-obstacle_rect_list = []
+# obstacle list and choices
 choices = ["fly", "snail", "snail", "snail"]
 
-# while loop needed to make pygame display window stay open forever
+# while loop makes game window stay open
 while True:
-    # Find the specific event that lets users closer windows
     # THE EVENT LOOP
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()  # the opposite of pygame.init()
-            # Use exit so code outside the for loop won't run once you call quit()
+            pygame.quit()
             exit()
 
         if game_active:
-            # Player jumps if Mouse clicks on him
-            # collidepoint() takes in a tuple (x, y), mouse_pos is a tuple
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                player_hit_mouse = player_rect.collidepoint(event.pos)
-                if player_hit_mouse and player_rect.bottom >= 300:
-                    player_gravity = -20
-
-            # Player jumps is space bar is pressed
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
-                    player_gravity = -20
-
             # Spawn obstacles according to timer
             if event.type == obstacle_timer:
                 obstacle_group.add(Obstacle(choice(choices)))
-                # if randint(0, 2):
-                #     # x-value should be between 900 and 1100
-                #     obstacle_rect_list.append(
-                #         snail_surf.get_rect(bottomright=(randint(900, 1100), 300))
-                #     )
-                # else:
-                #     obstacle_rect_list.append(
-                #         fly_surf.get_rect(bottomright=(randint(900, 1100), 210))
-                #     )
-
-            # Animate obstacles according to their timers
-            if event.type == snail_animation_timer:
-                if snail_frame_index:
-                    snail_frame_index = 0
-                else:
-                    snail_frame_index = 1
-                snail_surf = snail_frames[snail_frame_index]
-            if event.type == fly_animation_timer:
-                if fly_frame_index:
-                    fly_frame_index = 0
-                else:
-                    fly_frame_index = 1
-                fly_surf = fly_frames[fly_frame_index]
-
         else:
+            # Let space bar start a new game
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
                 start_time = int(pygame.time.get_ticks() / 1000)
@@ -230,14 +129,14 @@ while True:
         obstacle_group.draw(screen)
         obstacle_group.update()
 
+        # COLLISIONS
+        game_active = collision_sprite()
+
     else:
         # Populate start/game over screen
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
         screen.blit(game_title_surf, game_title_rect)
-        obstacle_rect_list.clear()  # remove all obstacles
-        player_rect.midbottom = (80, 300)  # ensure player starts on ground
-        player_gravity = 0
 
         # Show instructions if score is 0, otherwise show the score
         score_msg = test_font.render(f"Your score: {score}", False, (111, 196, 169))
@@ -249,5 +148,4 @@ while True:
 
     # draw all our elements; update everything.
     pygame.display.update()
-    # frames per second ceiling: shouldn't run faster than 60 fps)
     clock.tick(60)

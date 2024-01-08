@@ -129,3 +129,9 @@ To call them, do:
 player.update()
 update calls player_input and apply_gravity
 
+
+SPRITE COLLISIONS
+spritecollide(sprite, group, dokill)
+sprite should be a sprite
+ex: since player is a GroupSingle, do player.sprite
+returns a list of collided sprites
