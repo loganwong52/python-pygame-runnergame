@@ -8,9 +8,19 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.image = loadify(
+        player_walk_1 = loadify(
             "./UltimatePygameIntro-main/graphics/Player/player_walk_1.png"
         )
+        player_walk_2 = loadify(
+            "./UltimatePygameIntro-main/graphics/Player/player_walk_2.png"
+        )
+        self.player_walk = [player_walk_1, player_walk_2]
+        self.player_index = 0
+        self.player_jump = loadify(
+            "./UltimatePygameIntro-main/graphics/Player/jump.png"
+        )
+
+        self.image = self.player_walk[self.player_index]
         self.rect = self.image.get_rect(midbottom=(200, 300))
         self.gravity = 0
 
@@ -26,6 +36,16 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom >= 300:
             self.rect.bottom = 300
 
+    def animation_state(self):
+        if self.rect.bottom < 300:
+            self.image = self.player_jump
+        else:
+            self.player_index += 0.1
+            if self.player_index > len(self.player_walk):
+                self.player_index = 0
+            self.image = self.player_walk[int(self.player_index)]
+
     def update(self):
         self.player_input()
         self.apply_gravity()
+        self.animation_state()
