@@ -93,6 +93,14 @@ game_active = False
 start_time = 0
 score = 0
 
+# Music!
+jump_sound = pygame.mixer.Sound("./UltimatePygameIntro-main/audio/jump.mp3")
+jump_sound.set_volume(0.25)
+
+bg_music = pygame.mixer.Sound("./UltimatePygameIntro-main/audio/music.wav")
+bg_music.set_volume(0.3)
+bg_music.play(loops=-1)  # minus 1 means loop the song forever
+
 # SURFACE
 # User sees all things on a surface
 # Display surface: The game window (the actual canvas) aka screen
@@ -207,6 +215,7 @@ while True:
             # Player jumps is space bar is pressed
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
+                    jump_sound.play()
                     player_gravity = -20
 
             # Spawn obstacles according to timer
