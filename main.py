@@ -94,10 +94,6 @@ player_stand_rect = player_stand.get_rect(center=(400, 200))
 # Timers for OBSTACLES
 obstacle_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer, 1500)
-snail_animation_timer = pygame.USEREVENT + 2
-pygame.time.set_timer(snail_animation_timer, 500)
-fly_animation_timer = pygame.USEREVENT + 3
-pygame.time.set_timer(fly_animation_timer, 200)
 
 # obstacle list and choices
 choices = ["fly", "snail", "snail", "snail"]
